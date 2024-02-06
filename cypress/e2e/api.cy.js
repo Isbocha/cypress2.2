@@ -1,4 +1,4 @@
-describe("Petstore test api", () => {
+describe("Petstore test api post-put", () => {
 
   it("Create new user, get user, delete user", () => {
     let userID = 12345678
@@ -28,7 +28,31 @@ describe("Petstore test api", () => {
         phone: "+79150000000",
         userStatus: 1
       })
-      cy.request({
+    })
+  })
+})
+
+describe("Petstore test api post-delete", () => {
+
+  it("Create new user, get user, delete user", () => {
+    let userID = 12345678
+    let userName = "PetrovI"
+    cy.request('POST', '/user', {
+      id: userID,
+      username: userName,
+      firstName: "Ivan",
+      lastName: "Petrov",
+      email: "email@email.com",
+      password: "password",
+      phone: "+79150000000",
+      userStatus: 1
+    }).then((response) => {
+      expect(response.status).be.eql(200)
+      expect(response.body.message).be.eql('12345678')
+      cy.request(`/user/${userName}`).then((response) => {
+      expect(response.status).be.eql(200)
+      })
+       cy.request({
         method: 'DELETE',
         url: `/user/${response.body.userName}`,
         failOnStatusCode: false
@@ -43,5 +67,3 @@ describe("Petstore test api", () => {
     })
   })
 })
-
-
